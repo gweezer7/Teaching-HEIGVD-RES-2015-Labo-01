@@ -18,24 +18,49 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
-
+  private  int numberLine;
+  boolean firstTime; 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    numberLine = 1;
+    firstTime = true;
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");      
+      String remainingText = str.substring(off, off+len);
+      
+      
+      String ret = "";
+      if(firstTime){
+          ret = numberLine+"\t";
+          firstTime = false;
+      }
+      int indexOfBackspace;      
+      while(remainingText.contains("\n")){
+          numberLine++;
+          indexOfBackspace = remainingText.indexOf("\n");
+          //add the line with its number to ret          
+          ret += (remainingText.substring(0, indexOfBackspace+1) + numberLine+"\t");                
+          remainingText = remainingText.substring(indexOfBackspace+1);  
+      }
+//      if(remainingText.equals("")){
+//          ret += (numberLine+1)+"\t";
+//      }else{
+          ret += remainingText;
+//      }
+      out.write(ret);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    //throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
 
 }
